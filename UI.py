@@ -22,24 +22,27 @@ def crear_figura():
     stateText = ax.text(0.02, 0.95, "", transform=ax.transAxes)
 
     
-    """ #Leyenda
+    #Leyenda
     leyenda = [
         plt.Line2D([0], [0], marker='o', color='w', label='Clase 0', markerfacecolor='blue', markersize=8),
         plt.Line2D([0], [0], marker='o', color='w', label='Clase 1', markerfacecolor='red', markersize=8),
-        plt.Line2D([0], [0], marker='o', color='w', markerfacecolor='black', markersize=8, label='Sin clasificar'),
         plt.Line2D([0], [0], linestyle='-', color='green', label='Frontera'),
     ]
-    ax.legend(handles=leyenda, loc='upper right', fontsize=8) """
+    ax.legend(handles=leyenda, loc='upper right', fontsize=8)
     return fig, ax
 
 #Creacion de los widgets
 def crear_widgets(fig):
+    #Texto de clase
+    class0Text=ax.text(0.75, 0.6, "Click izquierdo:", transform=fig.transFigure, fontsize=10, color='black')
+    class0Text = ax.annotate(" Clase 0",xycoords=(class0Text),xy=(1, 0), verticalalignment='bottom', fontsize=10, color='blue')
+    class1Text=ax.text(0.75, 0.5, "Click derecho:", transform=fig.transFigure, fontsize=10, color='black')
+    class1Text = ax.annotate(" Clase 1",xycoords=(class1Text),xy=(1, 0), verticalalignment='bottom', fontsize=10, color='red')
     # Botones
     plotButton=widgets.Button(plt.axes([0.75, 0.3, 0.1, 0.15]), 'Train', color='lightblue', hovercolor='skyblue')
-    stopButton=widgets.Button(plt.axes([0.75, 0.2, 0.1, 0.05]), 'Stop', color='lightyellow', hovercolor='yellow')
-    clearButton=widgets.Button(plt.axes([0.75, 0.1, 0.1, 0.05]), 'Clear', color='lightcoral', hovercolor='salmon')
+    clearButton=widgets.Button(plt.axes([0.75, 0.2, 0.1, 0.05]), 'Clear', color='lightcoral', hovercolor='salmon')
     
-    return plotButton, clearButton, stopButton
+    return plotButton, clearButton
 
 #Evento para agregar puntos con el mouse
 puntos = []  # Lista para almacenar los puntos clickeados
@@ -66,6 +69,7 @@ def onclick(event):
 
 #Evento para limpiar los puntos
 def clear(event):
+    stateText.set_text("")  # Limpia el texto de estado
     for marker in markers:
         marker.remove()  # Elimina el punto de la figura
     for etiqueta in etiquetas:
@@ -104,7 +108,7 @@ def train(event):
             linea, = ax.plot(x_vals, y_vals, 'g-', linewidth=1.5,)  # Dibuja la línea de decisión
             lineas.append(linea)
         fig.canvas.draw_idle()  # Actualiza la figura para mostrar los cambios
-        plt.pause(0.5)  # Pausa para visualizar el proceso de entrenamiento
+        plt.pause(0.10)  # Pausa para visualizar el proceso de entrenamiento
 
 #Funcion para calcular m y c
 def calcular(w0,w1,bias):
@@ -119,7 +123,7 @@ def calcular(w0,w1,bias):
 
 
 fig, ax = crear_figura()
-plotButton, clearButton, stopButton = crear_widgets(fig)
+plotButton, clearButton = crear_widgets(fig)
 fig.canvas.mpl_connect('button_press_event', onclick)
 clearButton.on_clicked(clear)
 plotButton.on_clicked(train)

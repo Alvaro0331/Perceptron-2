@@ -32,7 +32,7 @@ def train_perceptron(x,d):
         if epoch >= 100:
             break
         epoch += 1
-    print("\nPredicciones finales: ")
+    """ print("\nPredicciones finales: ")
     for i in range(len(x)):
         v=np.dot(w, x[i]) + bias
         y= int(v >= 0)
@@ -43,5 +43,5 @@ def train_perceptron(x,d):
         y= int(v >= 0)
         if y == d[i]:
             correctos += 1
-    print(f"Correctos: {correctos} de {len(x)}")
+    print(f"Correctos: {correctos} de {len(x)}") """
     return w, bias, historial
