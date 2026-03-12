@@ -35,9 +35,20 @@ def crear_widgets(fig):
     
     return plotButton, clearButton, stopButton
 
-
+#Evento para agregar puntos con el mouse
+puntos = []  # Lista para almacenar los puntos clickeados
+markers = [] # Lista para almacenar los objetos de los puntos dibujados
+#lineas = [] # Lista para almacenar la línea dibujada
+def onclick(event):
+    if event.inaxes == ax:
+        x, y = event.xdata, event.ydata
+        marker, = ax.plot(x, y, 'ko')  # Dibuja un punto negro en la posición clickeada
+        puntos.append((x, y))  # Agrega el punto a la lista de puntos
+        markers.append(marker)  # Agrega el objeto del punto a la lista de markers
+        fig.canvas.draw()  # Actualiza la figura para mostrar el nuevo punto
 
 
 fig, ax = crear_figura()
 plotButton, clearButton, stopButton = crear_widgets(fig)
+fig.canvas.mpl_connect('button_press_event', onclick)
 plt.show()
